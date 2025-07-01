@@ -1,0 +1,33 @@
+﻿@* @{
+    var todoList = ViewData["TodoList"] as List<string>;
+}
+
+<h2>Danh sách công việc (Lấy từ ViewData)</h2>
+
+@if (todoList != null)
+{
+    <ul>
+        @foreach (var task in todoList)
+        {
+            <li>@task</li>
+        }
+    </ul>
+} *@
+
+@model List<string>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class=" text-center">
+    <h1 class="display-4">Welcome</h1>
+    <h2>Danh sách công việc (Lấy từ Model)</h2>
+    <ul>
+        @foreach (var task in Model)
+        {
+            <li>@task</li>
+        }
+    </ul>
+</div>
+

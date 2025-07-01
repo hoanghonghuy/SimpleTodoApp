@@ -1,0 +1,40 @@
+# Tệp và thư mục do Visual Studio tạo ra để lưu trạng thái phiên làm việc
+# Tuyệt đối không đưa lên Git vì chúng dành riêng cho máy của mỗi người dùng
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Kết quả build, chứa các file dll và file thực thi
+# Các file này sẽ được tạo lại mỗi khi build dự án
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+
+# Cấu hình publish lên server, chứa thông tin nhạy cảm
+*.Publish.xml
+*.pubxml
+
+# File log và kết quả test
+*.log
+*.tlog
+*.trx
+
+# Các gói NuGet (cho các dự án cũ hơn)
+# Các dự án mới hơn dùng <PackageReference> và không cần dòng này
+packages/
+*.nupkg
+
+# Các file tạm và cache của các công cụ bên thứ ba
+_ReSharper*/
+*.[Cc]ache
+*.orig
+
+# Tệp hệ điều hành
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/

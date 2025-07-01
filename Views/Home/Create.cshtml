@@ -1,0 +1,16 @@
+﻿@model SimpleTodoApp.Models.CreateTaskViewModel
+
+<h2>Tạo công việc mới</h2>
+<hr />
+
+<form asp-controller="Home" asp-action="Create" method="post">
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+    <br/>
+    <div>
+        <button type="submit">Thêm công việc</button>
+    </div>
+</form>
