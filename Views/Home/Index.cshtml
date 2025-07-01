@@ -14,7 +14,7 @@
     </ul>
 } *@
 
-@model List<string>
+@model List<SimpleTodoApp.Models.TaskEntity>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -26,7 +26,7 @@
     <ul>
         @foreach (var task in Model)
         {
-            <li>@task</li>
+            <li>@task.Title</li>
         }
     </ul>
 </div>

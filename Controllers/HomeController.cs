@@ -1,29 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using SimpleTodoApp.Models;
 using System.Diagnostics;
-using System.Threading.Tasks;
+using SimpleTodoApp.Data;
 
 namespace SimpleTodoApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
             // Tạo 1 danh sách công việc đơn giản
-            var tasks = new List<string>
-            {
-                "Học về Controller và View",
-                "Tìm hiểu cách truyền dữ liệu",
-                "Làm bài tập thực hành"
-            };
+            //var tasks = new List<string>
+            //{
+            //    "Học về Controller và View",
+            //    "Tìm hiểu cách truyền dữ liệu",
+            //    "Làm bài tập thực hành"
+            //};
             // ViewData["TodoList"] = tasks;
+
+            var tasks = _context.Tasks.ToList();
             return View(tasks);
         }
 
@@ -49,6 +51,18 @@ namespace SimpleTodoApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Chuyển đổi từ ViewModel sang Entity
+                var taskEntity = new TaskEntity
+                {
+                    Title = viewModel.Title,
+                    IsCompleted = false,
+                    CreatedDate = DateTime.Now
+                };
+
+                // Dùng DbContext để thêm và lưu vào CSDL
+                _context.Tasks.Add(taskEntity);
+                _context.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(viewModel);
