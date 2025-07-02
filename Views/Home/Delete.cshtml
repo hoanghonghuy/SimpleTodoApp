@@ -1,0 +1,21 @@
+﻿@model SimpleTodoApp.Models.TaskEntity
+
+<h2>Xác nhận xoá</h2>
+<h3>Bạn có chắc chắn muốn xoá công việc này?</h3>
+<div>
+    <h4>Công việc</h4>
+    <hr />
+    <dl>
+        <dt>Tiêu đề:</dt>
+        <dd>@Model.Title</dd>
+        <dt>Ngày tạo:</dt>
+        <dd>@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+    </dl>
+
+    <form asp-controller="Home" asp-action="Delete" method="post">
+        @* Gửi đi id của công việc cần xoá*@
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xoá" class="btn btn-danger" />
+        <a asp-action="Index">Quay lại danh sách</a>
+    </form>
+</div>

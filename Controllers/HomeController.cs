@@ -25,7 +25,7 @@ namespace SimpleTodoApp.Controllers
             //};
             // ViewData["TodoList"] = tasks;
 
-            var tasks = _context.Tasks.ToList();
+            var tasks = _context.Tasks.OrderByDescending(t => t.CreatedDate).ToList();
             return View(tasks);
         }
 
@@ -66,6 +66,62 @@ namespace SimpleTodoApp.Controllers
                 return RedirectToAction("Index");
             }
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            // Tìm công việc theo ID
+            var task = _context.Tasks.Find(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            // Chuyển đổi sang ViewModel
+            return View(task);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, TaskEntity task)
+        {
+            if (id != task.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                // Cập nhật công việc
+                _context.Tasks.Update(task);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(task);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            // Tìm công việc theo ID
+            var task = _context.Tasks.FirstOrDefault(t => t.Id == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return View(task);
+        }
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            // Tìm công việc theo ID
+            var task = _context.Tasks.Find(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            // Xóa công việc
+            _context.Tasks.Remove(task);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
