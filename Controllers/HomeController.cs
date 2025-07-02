@@ -2,125 +2,73 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleTodoApp.Models;
 using System.Diagnostics;
 using SimpleTodoApp.Data;
+using SimpleTodoApp.Services;
 
 namespace SimpleTodoApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public HomeController(ApplicationDbContext context)
+        private readonly ITaskService _taskService;
+        public HomeController(ITaskService taskService)
         {
-            _context = context;
+            _taskService = taskService;
         }
-
         public IActionResult Index()
         {
-            // Tạo 1 danh sách công việc đơn giản
-            //var tasks = new List<string>
-            //{
-            //    "Học về Controller và View",
-            //    "Tìm hiểu cách truyền dữ liệu",
-            //    "Làm bài tập thực hành"
-            //};
-            // ViewData["TodoList"] = tasks;
-
-            var tasks = _context.Tasks.OrderByDescending(t => t.CreatedDate).ToList();
+            var tasks = _taskService.GetAllTasks();
             return View(tasks);
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        // [GET] /Home/Create
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
-        public IActionResult Create(CreateTaskViewModel viewModel)
+        public IActionResult Create(CreateTaskViewModel taskViewModel)
         {
             if (ModelState.IsValid)
             {
-                // Chuyển đổi từ ViewModel sang Entity
-                var taskEntity = new TaskEntity
-                {
-                    Title = viewModel.Title,
-                    IsCompleted = false,
-                    CreatedDate = DateTime.Now
-                };
-
-                // Dùng DbContext để thêm và lưu vào CSDL
-                _context.Tasks.Add(taskEntity);
-                _context.SaveChanges();
-
-                return RedirectToAction("Index");
+                _taskService.CreateTask(taskViewModel);
+                return RedirectToAction(nameof(Index));
             }
-            return View(viewModel);
+            return View(taskViewModel);
         }
-
-        [HttpGet]
         public IActionResult Edit(int id)
         {
-            // Tìm công việc theo ID
-            var task = _context.Tasks.Find(id);
+            var task = _taskService.GetTaskById(id);
             if (task == null)
             {
                 return NotFound();
             }
-            // Chuyển đổi sang ViewModel
             return View(task);
         }
-
         [HttpPost]
         public IActionResult Edit(int id, TaskEntity task)
         {
-            if (id != task.Id)
+            var existingTask = _taskService.GetTaskById(id);
+            if (existingTask == null)
             {
                 return NotFound();
             }
             if (ModelState.IsValid)
             {
-                // Cập nhật công việc
-                _context.Tasks.Update(task);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                _taskService.UpdateTask(task);
+                return RedirectToAction("Index");
             }
             return View(task);
         }
-
-        [HttpGet]
         public IActionResult Delete(int id)
         {
-            // Tìm công việc theo ID
-            var task = _context.Tasks.FirstOrDefault(t => t.Id == id);
-            if (task == null)
+            var exitingTask = _taskService.GetTaskById(id);
+            if (exitingTask == null)
             {
                 return NotFound();
             }
-            return View(task);
+            return View(exitingTask);
         }
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
-            // Tìm công việc theo ID
-            var task = _context.Tasks.Find(id);
-            if (task == null)
-            {
-                return NotFound();
-            }
-            // Xóa công việc
-            _context.Tasks.Remove(task);
-            _context.SaveChanges();
+            _taskService.DeleteTask(id);
             return RedirectToAction(nameof(Index));
         }
     }
