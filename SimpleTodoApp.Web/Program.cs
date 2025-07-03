@@ -1,17 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using SimpleTodoApp.Data;
-using SimpleTodoApp.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
-builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

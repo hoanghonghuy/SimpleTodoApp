@@ -6,7 +6,7 @@ namespace SimpleTodoApp.Services
     {
         List<TaskEntity> GetAllTasks();
         TaskEntity GetTaskById(int id);
-        void CreateTask(CreateTaskViewModel task);
+        TaskEntity CreateTask(CreateTaskViewModel task);
         void UpdateTask(TaskEntity task);
         void DeleteTask(int id);
 

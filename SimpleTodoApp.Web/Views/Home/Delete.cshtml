@@ -1,0 +1,37 @@
+﻿@model SimpleTodoApp.Models.TaskEntity
+
+<h2>Xác nhận xóa</h2>
+<h3>Bạn có chắc chắn muốn xóa công việc này?</h3>
+<div>
+    <h4>Công việc</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Tiêu đề:</dt>
+        <dd class="col-sm-10">@Model.Title</dd>
+
+        <dt class="col-sm-2">Ngày tạo:</dt>
+        <dd class="col-sm-10">            
+            <span class="utc-date">@Model.CreatedDate.ToUniversalTime().ToString("o")</span>
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        @* Gửi đi Id của công việc cần xóa *@
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Quay lại danh sách</a>
+    </form>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dateElements = document.querySelectorAll('.utc-date');
+
+            dateElements.forEach(function(element) {
+                const utcDateString = element.textContent;
+                const localDate = new Date(utcDateString);
+                element.textContent = localDate.toLocaleString('vi-VN');
+            });
+        });
+    </script>
+}

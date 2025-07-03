@@ -19,7 +19,7 @@ public class TaskService : ITaskService
     {
         return _context.Tasks.Find(id);
     }
-    public void CreateTask(CreateTaskViewModel taskViewModel)
+    public TaskEntity CreateTask(CreateTaskViewModel taskViewModel)
     {
         var taskEntity = new TaskEntity
         {
@@ -29,6 +29,7 @@ public class TaskService : ITaskService
         };
         _context.Tasks.Add(taskEntity);
         _context.SaveChanges();
+        return taskEntity;
     }
     public void UpdateTask(TaskEntity task)
     {
